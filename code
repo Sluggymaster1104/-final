@@ -1,0 +1,497 @@
+import pandas as pd
+import tkinter as tk
+from tkinter import ttk, messagebox, simpledialog
+from PIL import Image, ImageTk
+
+# 轉換頁面
+def show_frame(frame):
+    frame.tkraise()
+
+# 讀取 CSV 資料(旅遊)
+file_path = r"C:\Users\9299a\OneDrive\桌面\程式設計概論\程式作業-旅遊景點.csv"
+try:
+    data = pd.read_csv(file_path)
+    if not {'district', 'type', 'Attraction'}.issubset(data.columns):
+        raise ValueError("CSV 檔案必須包含 'district', 'type' 和 'Attraction' 欄位！")
+except Exception as e:
+    messagebox.showerror("錯誤", f"無法讀取檔案：{e}")
+exit()
+
+# 獲取唯一的 district 和 type
+districts = data['district'].dropna().unique().tolist()
+types = data['type'].dropna().unique().tolist()
+
+# 讀取 CSV 資料(餐廳)
+file_path1 = r"C:\Users\9299a\OneDrive\桌面\程式設計概論\程式作業-餐廳.csv"
+try:
+    data1 = pd.read_csv(file_path1)
+    if not {'district', 'type', 'Restaurant'}.issubset(data1.columns):
+        raise ValueError("CSV 檔案必須包含 'district', 'type' 和 'Restaurant' 欄位！")
+except Exception as e:
+    messagebox1.showerror("錯誤", f"無法讀取檔案：{e}")
+exit()
+
+# 獲取唯一的 district 和 type
+districts1 = data1['district'].dropna().unique().tolist()
+types1 = data1['type'].dropna().unique().tolist()
+
+#讀取 CSV 資料(住宿)
+file_path2 = r"C:\Users\9299a\OneDrive\桌面\程式設計概論\程式作業-住宿.csv"
+try:
+    data2 = pd.read_csv(file_path2)
+    if not {'district', 'type', 'Hotel'}.issubset(data2.columns):
+        raise ValueError("CSV 檔案必須包含 'district', 'type' 和 'Hotel' 欄位！")
+except Exception as e:
+    messagebox.showerror("錯誤", f"無法讀取檔案：{e}")
+exit()
+
+# 獲取唯一的 district 和 type
+districts2 = data2['district'].dropna().unique().tolist()
+types2 = data2['type'].dropna().unique().tolist()
+
+#滑鼠靠近時變色
+def on_enter(event):
+    event.widget.config(bg="lightblue") # 滑鼠進入時改變顏色
+
+def on_leave(event):
+    event.widget.config(bg="#f4f5e1") # 滑鼠離開時恢復顏色
+
+def on_enter1(event):
+    event.widget.config(bg="lightblue") # 滑鼠進入時改變顏色
+
+def on_leave1(event):
+    event.widget.config(bg="hotpink") # 滑鼠離開時恢復顏色
+
+
+# 第一個主視窗
+root = tk.Tk()
+root.title("臺北生活指南")
+
+# 加載背景圖片
+image = Image.open("taipei.jpg")
+# 調整圖片大小
+image = image.resize((1400, 800), Image.Resampling.LANCZOS)
+bg_image = ImageTk.PhotoImage(image)
+
+# 創建不同頁面
+p1 = tk.Frame(root)
+p2 = tk.Frame(root)
+p3 = tk.Frame(root)
+p4 = tk.Frame(root)
+p5 = tk.Frame(root)
+
+p3.config(bg="lightsteelblue")
+p4.config(bg="lightsteelblue")
+p5.config(bg="lightsteelblue")
+
+for frame in (p1, p2, p3, p4, p5):
+    frame.grid(row=0, column=0, sticky='nsew')
+
+# 設置主視窗的行列權重
+root.grid_rowconfigure(0, weight=1) # 行權重設置為 1
+root.grid_columnconfigure(0, weight=1) # 列權重設置為 1
+
+# 使用 grid 設置行列權重，讓內容居中
+p1.grid_rowconfigure(0, weight=1)
+p1.grid_columnconfigure(0, weight=1)
+p2.grid_rowconfigure(0, weight=1)
+p2.grid_columnconfigure(0, weight=1)
+p3.grid_rowconfigure(0, weight=1)
+p3.grid_columnconfigure(0, weight=1)
+p4.grid_rowconfigure(0, weight=1)
+p4.grid_columnconfigure(0, weight=1)
+p5.grid_rowconfigure(0, weight=1)
+p5.grid_columnconfigure(0, weight=1)
+
+# 設定頁面的背景圖片
+bg_label2 = tk.Label(p1, image=bg_image)
+bg_label2.place(relwidth=1, relheight=1) # 讓圖片填滿整個頁面
+# 設定頁面的背景圖片
+bg_label2 = tk.Label(p2, image=bg_image)
+bg_label2.place(relwidth=1, relheight=1) # 讓圖片填滿整個頁面
+
+# 在第一個框架中添加內容和按鈕
+label1 = tk.Label(p1, text="臺北生活指南", fg="white", font=("標楷體", 40), bg="lightblue")
+label1.grid(row=0, column=0)
+button1 = tk.Button(p1, text="歡迎使用", bg="#f4f5e1", fg="#ad9363", font=('標楷體', 30, 'bold'), activeforeground="#5e5139", command=lambda: show_frame(p2))
+button1.grid(row=1, column=0, pady=20)
+
+# 在第二個框架中添加內容和按鈕
+# 設置額外行列來控制居中位置
+for i in range(3):
+    p2.grid_rowconfigure(i, weight=1)
+for i in range(5): # 額外的空列使按鈕區域居中
+    p2.grid_columnconfigure(i, weight=1)
+
+label2 = tk.Label(p2, text="請選擇您想查詢的內容",bg="lightcyan", fg="midnightblue", font=("標楷體", 20))
+label2.grid(row=0, column=1, pady=20)
+
+button2 = tk.Button(p2, text="旅遊", font=('標楷體', 20), bg="#f4f5e1", fg="#ad9363",command=lambda: show_frame(p3))
+button2.grid(row=1, column=0, pady=20) # 左側按鈕
+
+button3 = tk.Button(p2, text="美食", font=('標楷體', 20),bg="#f4f5e1", fg="#ad9363", command=lambda: show_frame(p4))
+button3.grid(row=1, column=1, pady=20) # 中間按鈕
+
+button4 = tk.Button(p2, text="住宿", font=('標楷體', 20),bg="#f4f5e1", fg="#ad9363",command=lambda: show_frame(p5))
+button4.grid(row=1, column=2) # 右側按鈕
+
+
+# 綁定滑鼠進入和離開事件
+button2.bind("<Enter>", on_enter)
+button2.bind("<Leave>", on_leave)
+button3.bind("<Enter>", on_enter)
+button3.bind("<Leave>", on_leave)
+button4.bind("<Enter>", on_enter)
+button4.bind("<Leave>", on_leave)
+
+# 第三個框架 旅遊
+# 標籤與下拉選單
+label_district = tk.Label(p3, text="請選擇您想前往的區域：", font=("標楷體", 17),fg="navy", anchor="center", justify="center")
+label_district.grid(row=0, column=0, pady=10, sticky="nsew")
+
+combo_district = ttk.Combobox(p3, values=districts, state="readonly", font=("標楷體", 14), width=10)
+combo_district.grid(row=0, column=1, pady=10, sticky="nsew")
+
+label_type = tk.Label(p3, text="請選擇您喜歡的旅遊類型：", font=("標楷體", 17),fg="navy", anchor="center", justify="center")
+label_type.grid(row=1, column=0, pady=10, sticky="nsew")
+
+combo_type = ttk.Combobox(p3, values=types, state="readonly", font=("標楷體", 14), width=10)
+combo_type.grid(row=1, column=1, pady=10, sticky="nsew")
+
+# 顯示推薦結果
+result_label = tk.Label(p3, text="推薦景點：", font=("標楷體", 17),fg="navy", anchor="center", justify="center")
+result_label.grid(row=2, column=0, columnspan=2, padx=10, pady=10, sticky="nsew")
+
+# 景點列表框
+listbox_attractions = tk.Listbox(p3, font=("標楷體", 14), height=6, selectmode=tk.SINGLE)
+listbox_attractions.grid(row=3, column=0, columnspan=2, padx=10, pady=10, sticky="nsew")
+
+#第四頁面內容
+# 標籤與下拉選單
+label_district1 = tk.Label(p4, text="請選擇您想前往的區域：", font=("標楷體", 17),fg="navy", anchor="center", justify="center")
+label_district1.grid(row=0, column=0, pady=10, sticky="nsew")
+
+combo_district1 = ttk.Combobox(p4, values=districts1, state="readonly", font=("標楷體", 14), width=10)
+combo_district1.grid(row=0, column=1, pady=10, sticky="nsew")
+
+label_type1 = tk.Label(p4, text="請選擇您喜歡的餐廳類型：", font=("標楷體", 17),fg="navy", anchor="center", justify="center")
+label_type1.grid(row=1, column=0, pady=10, sticky="nsew")
+
+combo_type1 = ttk.Combobox(p4, values=types1, state="readonly", font=("標楷體", 14), width=10)
+combo_type1.grid(row=1, column=1, pady=10, sticky="nsew")
+
+# 推薦結果標籤
+result_label1 = tk.Label(p4, text="推薦餐廳：", font=("標楷體", 17),fg="navy", anchor="center", justify="center")
+result_label1.grid(row=2, column=0, columnspan=2, padx=10, pady=10, sticky="nsew")
+
+# 餐廳列表框
+listbox_restaurants = tk.Listbox(p4, font=("標楷體", 14), height=6, selectmode=tk.SINGLE)
+listbox_restaurants.grid(row=3, column=0, columnspan=2, padx=10, pady=10, sticky="nsew")
+
+#第五頁面內容
+# 標籤與下拉選單
+label_district2 = tk.Label(p5, text="請選擇您想前往的區域：", font=("標楷體", 17),fg="navy", anchor="center", justify="center")
+label_district2.grid(row=0, column=0, pady=10, sticky="nsew")
+
+combo_district2 = ttk.Combobox(p5, values=districts2, state="readonly", font=("標楷體", 14), width=10)
+combo_district2.grid(row=0, column=1, pady=10, sticky="nsew")
+
+label_type2 = tk.Label(p5, text="請選擇您想入住的飯店星級：", font=("標楷體", 17),fg="navy", anchor="center", justify="center")
+label_type2.grid(row=1, column=0, pady=10, sticky="nsew")
+
+combo_type2 = ttk.Combobox(p5, values=types2, state="readonly", font=("標楷體", 14), width=10)
+combo_type2.grid(row=1, column=1, pady=10, sticky="nsew")
+
+# 推薦結果標籤
+result_label2 = tk.Label(p5, text="推薦飯店：", font=("標楷體", 17),fg="navy", anchor="center", justify="center")
+result_label2.grid(row=2, column=0, columnspan=2, padx=10, pady=10, sticky="nsew")
+
+# 飯店列表框
+listbox_hotels = tk.Listbox(p5, font=("標楷體", 14), height=6, selectmode=tk.SINGLE)
+listbox_hotels.grid(row=3, column=0, columnspan=2, padx=10, pady=10, sticky="nsew")
+
+# 收藏列表
+favorites = []
+favorites1 = []
+favorites2 = []
+
+
+# 添加到收藏功能
+def add_to_favorites():
+    selected_index = listbox_attractions.curselection()
+    if not selected_index:
+        messagebox.showwarning("警告", "請先選擇一個景點！")
+        return
+
+    selected_attraction = listbox_attractions.get(selected_index)
+    if selected_attraction not in favorites:
+        favorites.append(selected_attraction)
+        messagebox.showinfo("收藏", f"景點 '{selected_attraction}' 已加入收藏！")
+    else:
+        messagebox.showwarning("警告", "該景點已在收藏中！")
+
+# 添加到收藏功能(美食)
+def add_to_favorites1():
+    selected_index = listbox_restaurants.curselection()
+    if not selected_index:
+        messagebox.showwarning("警告", "請先選擇一間餐廳！")
+        return
+
+    selected_restaurant = listbox_restaurants.get(selected_index)
+    if selected_restaurant not in favorites1:
+        favorites1.append(selected_restaurant)
+        messagebox.showinfo("收藏", f"餐廳 '{selected_restaurant}' 已加入收藏！")
+    else:
+        messagebox.showwarning("警告", "該餐廳已在收藏中！")
+
+# 添加到收藏功能(飯店)
+def add_to_favorites2():
+    selected_index = listbox_hotels.curselection()
+    if not selected_index:
+        messagebox.showwarning("警告", "請先選擇一間飯店！")
+        return
+
+    selected_hotel = listbox_hotels.get(selected_index)
+    if selected_hotel not in favorites2:
+        favorites2.append(selected_hotel)
+        messagebox.showinfo("收藏", f"飯店 '{selected_hotel}' 已加入收藏！")
+    else:
+        messagebox.showwarning("警告", "該飯店已在收藏中！")
+
+# 查看收藏功能
+def view_favorites():
+    if not favorites:
+        messagebox.showinfo("我的收藏", "目前沒有收藏的景點。")
+        return
+
+    view_window = tk.Toplevel(root)
+    view_window.title("我的收藏")
+
+    tk.Label(view_window, text="收藏的景點：", font=("標楷體", 16)).pack(pady=10)
+
+    listbox_favorites = tk.Listbox(view_window, font=("標楷體", 14), height=10, selectmode=tk.SINGLE)
+    listbox_favorites.pack(pady=10, padx=10)
+
+    for favorite in favorites:
+        listbox_favorites.insert(tk.END, favorite)
+
+    def delete_selected():
+        selected_index = listbox_favorites.curselection()
+        if not selected_index:
+            messagebox.showwarning("警告", "請先選擇一個景點進行刪除！")
+            return
+
+        selected_item = listbox_favorites.get(selected_index)
+        favorites.remove(selected_item)
+        listbox_favorites.delete(selected_index)
+        messagebox.showinfo("刪除收藏", f"景點 '{selected_item}' 已從收藏中移除！")
+
+    delete_button = tk.Button(view_window, text="刪除選定", font=("標楷體", 14), command=delete_selected)
+    delete_button.pack(pady=10)
+
+    close_button = tk.Button(view_window, text="關閉", font=("標楷體", 14), command=view_window.destroy)
+    close_button.pack(pady=10)
+
+# 查看收藏功能 - 餐廳
+def view_favorites1():
+    if not favorites1:
+        messagebox.showinfo("我的收藏", "目前沒有收藏的餐廳。")
+        return
+
+    view_window = tk.Toplevel(root)
+    view_window.title("我的收藏")
+
+    tk.Label(view_window, text="收藏的餐廳：", font=("標楷體", 16)).pack(pady=10)
+
+    listbox_favorites = tk.Listbox(view_window, font=("標楷體", 14), height=10, selectmode=tk.SINGLE)
+    listbox_favorites.pack(pady=10, padx=10)
+
+    for favorite in favorites1: # 這裡應該顯示的是 favorites1，而不是 favorites
+        listbox_favorites.insert(tk.END, favorite)
+
+    def delete_selected():
+        selected_index = listbox_favorites.curselection()
+        if not selected_index:
+            messagebox.showwarning("警告", "請先選擇一間餐廳進行刪除！")
+            return
+
+        selected_item = listbox_favorites.get(selected_index)
+        favorites1.remove(selected_item) # 正確應該從 favorites1 中移除
+        listbox_favorites.delete(selected_index)
+        messagebox.showinfo("刪除收藏", f"餐廳 '{selected_item}' 已從收藏中移除！")
+
+    delete_button = tk.Button(view_window, text="刪除選定", font=("標楷體", 14), command=delete_selected)
+    delete_button.pack(pady=10)
+
+    close_button = tk.Button(view_window, text="關閉", font=("標楷體", 14), command=view_window.destroy)
+    close_button.pack(pady=10)
+
+# 查看收藏功能 - 飯店
+def view_favorites2():
+    if not favorites2:
+        messagebox.showinfo("我的收藏", "目前沒有收藏的飯店。")
+        return
+
+    view_window = tk.Toplevel(root)
+    view_window.title("我的收藏")
+
+    tk.Label(view_window, text="收藏的飯店：", font=("標楷體", 16)).pack(pady=10)
+
+    listbox_favorites = tk.Listbox(view_window, font=("標楷體", 14), height=10, selectmode=tk.SINGLE)
+    listbox_favorites.pack(pady=10, padx=10)
+
+    for favorite in favorites2: # 這裡應該顯示的是 favorites1，而不是 favorites
+        listbox_favorites.insert(tk.END, favorite)
+
+    def delete_selected():
+        selected_index = listbox_favorites.curselection()
+        if not selected_index:
+            messagebox.showwarning("警告", "請先選擇一間飯店進行刪除！")
+            return
+
+        selected_item = listbox_favorites.get(selected_index)
+        favorites2.remove(selected_item) # 正確應該從 favorites1 中移除
+        listbox_favorites.delete(selected_index)
+        messagebox.showinfo("刪除收藏", f"飯店 '{selected_item}' 已從收藏中移除！")
+
+    delete_button = tk.Button(view_window, text="刪除選定", font=("標楷體", 14), command=delete_selected)
+    delete_button.pack(pady=10)
+
+    close_button = tk.Button(view_window, text="關閉", font=("標楷體", 14), command=view_window.destroy)
+    close_button.pack(pady=10)
+   
+
+
+# 查詢功能 (景點)
+def recommend():
+    selected_district = combo_district.get()
+    selected_type = combo_type.get()
+
+    if not selected_district or not selected_type:
+        messagebox.showwarning("警告", "請選擇地區和類型！")
+        return
+
+    filtered_data = data[(data['district'] == selected_district) & (data['type'] == selected_type)]
+    attractions = filtered_data['Attraction'].tolist()
+
+    listbox_attractions.delete(0, tk.END)
+    if attractions:
+        for attraction in attractions:
+            listbox_attractions.insert(tk.END, attraction)
+    else:
+        listbox_attractions.insert(tk.END, "無符合條件的景點。")
+
+# 查詢功能餐廳
+def recommend1():
+    selected_district1 = combo_district1.get()
+    selected_type1 = combo_type1.get()
+
+    if not selected_district1 or not selected_type1:
+        messagebox.showwarning("警告", "請選擇地區和類型！")
+        return
+
+    filtered_data1 = data1[(data1['district'] == selected_district1) & (data1['type'] == selected_type1)]
+    restaurants1 = filtered_data1['Restaurant'].tolist()
+
+    listbox_restaurants.delete(0, tk.END) # 清空現有的推薦結果
+
+    if restaurants1:
+        for restaurant in restaurants1:
+            listbox_restaurants.insert(tk.END, restaurant) # 將餐廳名稱插入列表框
+    else:
+        listbox_restaurants.insert(tk.END, "無符合條件的餐廳。") # 若無結果，顯示提示
+
+# 查詢功能飯店
+def recommend2():
+    selected_district2 = combo_district2.get()
+    selected_type2 = combo_type2.get()
+
+    if not selected_district2 or not selected_type2:
+        messagebox.showwarning("警告", "請選擇地區和類型！")
+        return
+
+    filtered_data2 = data2[(data2['district'] == selected_district2) & (data2['type'] == selected_type2)]
+    hotels2 = filtered_data2['Hotel'].tolist()
+
+    listbox_hotels.delete(0, tk.END) # 清空現有的推薦結果
+
+    if hotels2:
+        for hotel in hotels2:
+            listbox_hotels.insert(tk.END, hotel)
+    else:
+        listbox_hotels.insert(tk.END, "無符合條件的飯店。") # 若無結果，顯示提示
+
+# 查詢按鈕
+btn_recommend = tk.Button(p3, text="查詢", font=("標楷體", 20), command=recommend, width=10)
+btn_recommend.grid(row=4, column=0, pady=10)
+btn_recommend1 = tk.Button(p4, text="查詢", font=("標楷體", 20), command=recommend1)
+btn_recommend1.grid(row=4, column=0, pady=10)
+btn_recommend2 = tk.Button(p5, text="查詢", font=("標楷體", 20), command=recommend2)
+btn_recommend2.grid(row=4, column=0, pady=10)
+
+# 收藏按鈕
+btn_add_favorite = tk.Button(p3, text="加入收藏", font=("標楷體", 20), bg="hotpink" ,command=add_to_favorites, width=10)
+btn_add_favorite.grid(row=4, column=1, pady=10)
+btn_add_favorite1 = tk.Button(p4, text="加入收藏", font=("標楷體", 20),bg="hotpink" , command=add_to_favorites1, width=10)
+btn_add_favorite1.grid(row=4, column=1, pady=10)
+btn_add_favorite2 = tk.Button(p5, text="加入收藏", font=("標楷體", 20),bg="hotpink" , command=add_to_favorites2, width=10)
+btn_add_favorite2.grid(row=4, column=1, pady=10)
+
+# 查看收藏按鈕
+btn_view_favorites = tk.Button(p3, text="查看收藏", font=("標楷體", 20), bg="hotpink" ,command=view_favorites, width=10)
+btn_view_favorites.grid(row=5, column=0, pady=10)
+p4_view = tk.Button(p4, text="查看收藏", font=("標楷體", 20),bg="hotpink" , command=view_favorites1, width=10)
+p4_view.grid(row=5, column=0, pady=10)
+p5_view = tk.Button(p5, text="查看收藏", font=("標楷體", 20),bg="hotpink" , command=view_favorites2, width=10)
+p5_view.grid(row=5, column=0, pady=10)
+p2_view = tk.Button(p2, text="旅遊收藏夾", font=("標楷體", 20), bg="hotpink" ,fg="purple", command=view_favorites, width=10)
+p2_view.grid(row=2, column=0, pady=20)
+p2_view1 = tk.Button(p2, text="美食收藏夾", font=("標楷體", 20),bg="hotpink",fg="purple", command=view_favorites1, width=10)
+p2_view1.grid(row=2, column=1, pady=20)
+p2_view2 = tk.Button(p2, text="住宿收藏夾", font=("標楷體", 20), bg="hotpink",fg="purple",command=view_favorites2, width=10)
+p2_view2.grid(row=2, column=2, pady=20)
+
+p2_view.bind("<Enter>", on_enter1)
+p2_view.bind("<Leave>", on_leave1)
+p2_view1.bind("<Enter>", on_enter1)
+p2_view1.bind("<Leave>", on_leave1)
+p2_view2.bind("<Enter>", on_enter1)
+p2_view2.bind("<Leave>", on_leave1)
+
+#回上頁按鈕
+goback = tk.Button(p3,text="返回",font=("標楷體", 20), command=lambda: show_frame(p2), width=10)
+goback.grid(row=5, column=1, pady=10)
+goback1 = tk.Button(p4,text="返回",font=("標楷體", 20), command=lambda: show_frame(p2), width=10)
+goback1.grid(row=5, column=1, pady=10)
+goback2 = tk.Button(p5,text="返回",font=("標楷體", 20), command=lambda: show_frame(p2), width=10)
+goback2.grid(row=5, column=1, pady=10)
+
+# 調整第三頁的行列權重，讓內容置中
+for i in range(6):
+    p3.grid_rowconfigure(i, weight=1)
+for i in range(2):
+    p3.grid_columnconfigure(i, weight=1)
+
+# 調整第四頁的行列權重，讓內容置中
+for i in range(6):
+    p4.grid_rowconfigure(i, weight=1)
+for i in range(2):
+    p4.grid_columnconfigure(i, weight=1)
+
+# 調整第五頁的行列權重，讓內容置中
+for i in range(6):
+    p5.grid_rowconfigure(i, weight=1)
+for i in range(2):
+    p5.grid_columnconfigure(i, weight=1)
+
+
+# 在第二個框架中設置行列權重，讓內容在視窗放大或縮小時依然居中
+for i in range(3):
+    p2.grid_rowconfigure(i, weight=1) # 設置每行的權重，使其可彈性調整
+for i in range(5): # 5列來控制按鈕區域，讓按鈕在列中居中
+    p2.grid_columnconfigure(i, weight=1) # 設置每列的權重，使其可彈性調整
+
+# 顯示初始頁面
+show_frame(p1)
+
+root.mainloop()
